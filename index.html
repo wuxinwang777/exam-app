@@ -1999,13 +1999,25 @@ function logout() {
 }
 
 // ── INIT ────────────────────────────────────────────────────────────────────
+let appReady = false;
+
 async function init() {
-  const r = await fetch('qbank.json');
-  const text = await r.text();
-  questions = JSON.parse(text.replace(/^\uFEFF/, ''));
-  state = loadState();
-  updateHomeStats();
-  updateUserUI();
+  document.getElementById('hero-sub').textContent = '加载中...';
+  document.querySelectorAll('.mode-card').forEach(c => c.style.opacity = '0.5');
+  try {
+    const r = await fetch('qbank.json');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const text = await r.text();
+    questions = JSON.parse(text.replace(/^\uFEFF/, ''));
+    appReady = true;
+    document.querySelectorAll('.mode-card').forEach(c => c.style.opacity = '1');
+    state = loadState();
+    updateHomeStats();
+    updateUserUI();
+  } catch (e) {
+    document.getElementById('hero-sub').textContent = '加载失败，请刷新重试';
+    console.error('init error:', e);
+  }
 }
 
 // ── STATS UPDATE ─────────────────────────────────────────────────────────────
@@ -2086,6 +2098,10 @@ function startMode(m) {
   document.getElementById('quiz-count').textContent = `1/${total}`;
   document.getElementById('quiz-progress-fill').style.width = (100 / total) + '%';
 
+  if (!appReady || questions.length === 0) {
+    showToast('请等待题库加载完成');
+    return;
+  }
   showQuizScreen();
   renderQuestion();
 }
@@ -2133,6 +2149,25 @@ function renderQuestion() {
   const collectBtn = document.getElementById('collect-btn');
   collectBtn.textContent = isCollect(q.id) ? '★' : '☆';
   collectBtn.style.color = isCollect(q.id) ? 'var(--amber)' : 'var(--text-muted)';
+
+  // 多选题：底部加确认按钮
+  let confirmBtn = document.getElementById('confirm-btn');
+  if (isJudge) {
+    if (confirmBtn) confirmBtn.style.display = 'none';
+  } else {
+    if (!confirmBtn) {
+      const btn = document.createElement('button');
+      btn.id = 'confirm-btn';
+      btn.className = 'action-btn btn-secondary';
+      btn.style.cssText = 'display:none;flex:0 0 44px;max-width:44px;font-size:16px;cursor:pointer;border-radius:10px;';
+      btn.innerHTML = '✓';
+      btn.title = '确认答案';
+      btn.setAttribute('onclick', 'confirmMultiAnswer()');
+      document.querySelector('.bottom-action').insertBefore(btn, nextBtn);
+      confirmBtn = btn;
+    }
+    confirmBtn.style.display = 'none';
+  }
 
   let prevAnswer = null; // 记录此题之前的作答
   if (state.done.has(q.id)) {
@@ -2221,11 +2256,19 @@ function selectOption(el, key) {
     checkAnswer(key);
   } else {
     el.classList.toggle('selected');
+    const confirmBtn = document.getElementById('confirm-btn');
     const selectedKeys = [...document.querySelectorAll('.option-item.selected')]
       .map(i => i.dataset.key).sort().join('');
-    if (selectedKeys.length > 0) {
-      checkAnswer(selectedKeys);
+    // 多选题：显示/隐藏确认按钮，禁用下一题
+    if (confirmBtn) {
+      confirmBtn.style.display = selectedKeys.length > 0 ? 'inline-flex' : 'none';
     }
+    const nextBtn = document.getElementById('next-btn');
+    if (nextBtn) {
+      nextBtn.disabled = true;
+      nextBtn.textContent = '请先确认答案';
+    }
+    document.getElementById('analysis').classList.remove('show');
   }
 }
 
@@ -2238,6 +2281,17 @@ function selectJudge(el) {
   checkAnswer(btn.dataset.val);
 }
 
+
+// ── MULTI CONFIRM ───────────────────────────────────────────────────────────
+function confirmMultiAnswer() {
+  const selectedKeys = [...document.querySelectorAll('.option-item.selected')]
+    .map(i => i.dataset.key).sort().join('');
+  if (!selectedKeys) {
+    showToast('请至少选择一个选项');
+    return;
+  }
+  checkAnswer(selectedKeys);
+}
 function checkAnswer(userAnswer) {
   const q = filtered[current];
   const correct = q.answer.trim();
@@ -2254,6 +2308,9 @@ function checkAnswer(userAnswer) {
       if (correctKeys.includes(key)) el.classList.add('show-correct');
       else if (el.classList.contains('selected')) el.classList.add('wrong');
     });
+    // 隐藏确认按钮
+    const cb = document.getElementById('confirm-btn');
+    if (cb) cb.style.display = 'none';
   } else if (q.type === '判断题') {
     document.querySelectorAll('.judge-btn').forEach(b => {
       b.classList.add('locked');
