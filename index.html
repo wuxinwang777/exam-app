@@ -2134,6 +2134,12 @@ function renderQuestion() {
   collectBtn.textContent = isCollect(q.id) ? '★' : '☆';
   collectBtn.style.color = isCollect(q.id) ? 'var(--amber)' : 'var(--text-muted)';
 
+  let prevAnswer = null; // 记录此题之前的作答
+  if (state.done.has(q.id)) {
+    // 恢复之前此题的作答（通过sessionStorage）
+    prevAnswer = sessionStorage.getItem('q_answer_' + q.id);
+  }
+
   if (isJudge) {
     optsList.innerHTML = `
       <div class="judge-options">
@@ -2144,6 +2150,21 @@ function renderQuestion() {
           <span class="judge-icon">✗</span><span class="judge-label">错误</span>
         </div>
       </div>`;
+    if (prevAnswer) {
+      const correct = q.answer.trim();
+      document.querySelectorAll('.judge-btn').forEach(b => {
+        b.classList.add('locked');
+        if (b.dataset.val === correct) b.classList.add('correct');
+        else if (b.dataset.val === prevAnswer) b.classList.add(prevAnswer === correct ? 'correct' : 'wrong');
+      });
+      const isRight = prevAnswer === correct;
+      document.getElementById('analysis').classList.add('show');
+      document.getElementById('analysis-answer').innerHTML = isRight
+        ? `<strong>✓ 正确</strong>`
+        : `<strong>✗ 错误</strong>，正确答案是 <strong>${correct}</strong>`;
+      nextBtn.disabled = false;
+      nextBtn.textContent = current < filtered.length - 1 ? '下一题 →' : '完成练习';
+    }
   } else {
     const keys = Object.keys(q.options);
     optsList.innerHTML = keys.map(k => `
@@ -2151,6 +2172,35 @@ function renderQuestion() {
         <div class="option-key">${k}</div>
         <div class="option-text">${q.options[k]}</div>
       </div>`).join('');
+  }
+
+  // 对非判断题已作答的题也恢复显示
+  if (!isJudge && prevAnswer) {
+    const correct = q.answer.trim();
+    const isMulti = q.type === '多选题';
+    if (isMulti) {
+      const correctKeys = correct.split('');
+      const userKeys = prevAnswer.split('');
+      document.querySelectorAll('.option-item').forEach(el => {
+        const key = el.dataset.key;
+        el.classList.add('locked');
+        if (correctKeys.includes(key)) el.classList.add('show-correct');
+        else if (userKeys.includes(key)) el.classList.add('wrong');
+      });
+    } else {
+      document.querySelectorAll('.option-item').forEach(el => {
+        el.classList.add('locked');
+        if (el.dataset.key === correct) el.classList.add('correct');
+        else if (el.dataset.key === prevAnswer) el.classList.add('wrong');
+      });
+    }
+    const isRight = prevAnswer === correct;
+    document.getElementById('analysis').classList.add('show');
+    document.getElementById('analysis-answer').innerHTML = isRight
+      ? `<strong>✓ 正确</strong>`
+      : `<strong>✗ 错误</strong>，正确答案是 <strong>${correct}</strong>`;
+    nextBtn.disabled = false;
+    nextBtn.textContent = current < filtered.length - 1 ? '下一题 →' : '完成练习';
   }
 
   document.getElementById('prev-btn').style.visibility = current > 0 ? 'visible' : 'hidden';
@@ -2190,6 +2240,8 @@ function selectJudge(el) {
 function checkAnswer(userAnswer) {
   const q = filtered[current];
   const correct = q.answer.trim();
+  // 保存作答到sessionStorage，用于返回时恢复显示
+  sessionStorage.setItem('q_answer_' + q.id, userAnswer);
   const isMulti = q.type === '多选题';
   const nextBtn = document.getElementById('next-btn');
 
