@@ -2230,11 +2230,12 @@ function selectOption(el, key) {
 }
 
 function selectJudge(el) {
-  const q = filtered[current];
-  if (el.classList.contains('locked')) return;
+  // 找到实际的 judge-btn 元素（用户可能点击了内层 span）
+  const btn = el.closest ? el.closest('.judge-btn') : el;
+  if (btn.classList.contains('locked')) return;
   document.querySelectorAll('.judge-btn').forEach(b => b.classList.remove('selected', 'locked'));
-  el.classList.add('selected');
-  checkAnswer(el.dataset.val);
+  btn.classList.add('selected');
+  checkAnswer(btn.dataset.val);
 }
 
 function checkAnswer(userAnswer) {
@@ -2299,8 +2300,9 @@ function nextQuestion() {
   } else {
     if (examMode) endExam();
     else {
-      nextBtn.textContent = '已到最后';
-      nextBtn.disabled = true;
+      const nBtn = document.getElementById('next-btn');
+      nBtn.textContent = '已到最后';
+      nBtn.disabled = true;
       showToast('🎉 练习完成！');
     }
   }
