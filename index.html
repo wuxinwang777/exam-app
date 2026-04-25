@@ -13,7 +13,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; }
 :root {
   --bg: #0d1117;
   --surface: #161b22;
@@ -44,7 +43,7 @@ html, body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -66,7 +65,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  -webkit-gap: 12px; gap: 12px;
+  gap: 12px;
 }
 
 .top-bar-title {
@@ -79,13 +78,13 @@ html, body {
 .top-bar-right {
   display: flex;
   align-items: center;
-  -webkit-gap: 8px; gap: 8px;
+  gap: 8px;
 }
 
 .user-btn {
   display: flex;
   align-items: center;
-  -webkit-gap: 6px; gap: 6px;
+  gap: 6px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 100px;
@@ -124,7 +123,7 @@ html, body {
 
 /* ── HOME ── */
 #home {
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 0 20px 80px;
   animation: fadeUp 0.5s ease;
 }
@@ -153,7 +152,7 @@ html, body {
 .hero-badge {
   display: inline-flex;
   align-items: center;
-  -webkit-gap: 6px; gap: 6px;
+  gap: 6px;
   background: var(--amber-dim);
   border: 1px solid rgba(240,165,0,0.25);
   color: var(--amber);
@@ -186,7 +185,7 @@ html, body {
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  -webkit-gap: 10px; gap: 10px;
+  gap: 10px;
   margin-bottom: 28px;
 }
 
@@ -227,7 +226,7 @@ html, body {
   margin-bottom: 12px;
   display: flex;
   align-items: center;
-  -webkit-gap: 10px; gap: 10px;
+  gap: 10px;
 }
 
 .section-title::after {
@@ -241,7 +240,7 @@ html, body {
 .mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  -webkit-gap: 10px; gap: 10px;
+  gap: 10px;
   margin-bottom: 24px;
 }
 
@@ -294,7 +293,7 @@ html, body {
 /* ── Type filter ── */
 .type-filter {
   display: flex;
-  -webkit-gap: 8px; gap: 8px;
+  gap: 8px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
@@ -344,7 +343,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  -webkit-gap: 3px; gap: 3px;
+  gap: 3px;
   padding: 6px 0;
   cursor: pointer;
   color: var(--text-dim);
@@ -362,7 +361,7 @@ html, body {
 /* ── QUIZ SCREEN ── */
 #quiz-screen {
   display: none;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 0 0 110px;
   animation: fadeUp 0.35s ease;
 }
@@ -380,7 +379,7 @@ html, body {
   padding: 10px 20px;
   display: flex;
   align-items: center;
-  -webkit-gap: 12px; gap: 12px;
+  gap: 12px;
 }
 
 .back-btn {
@@ -451,7 +450,7 @@ html, body {
 .question-type-badge {
   display: inline-flex;
   align-items: center;
-  -webkit-gap: 5px; gap: 5px;
+  gap: 5px;
   font-size: 11px;
   font-weight: 700;
   padding: 3px 10px;
@@ -471,12 +470,12 @@ html, body {
   color: var(--text);
 }
 
-.options-list { display: flex; flex-direction: column; -webkit-gap: 8px; gap: 8px; }
+.options-list { display: flex; flex-direction: column; gap: 8px; }
 
 .option-item {
   display: flex;
   align-items: flex-start;
-  -webkit-gap: 10px; gap: 10px;
+  gap: 10px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -559,7 +558,7 @@ html, body {
 .judge-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  -webkit-gap: 10px; gap: 10px;
+  gap: 10px;
 }
 
 .judge-btn {
@@ -629,7 +628,7 @@ html, body {
   -webkit-backdrop-filter: blur(20px);
   border-top: 1px solid var(--border);
   display: flex;
-  -webkit-gap: 8px; gap: 8px;
+  gap: 8px;
   padding: 10px 16px max(10px, env(safe-area-inset-bottom));
   z-index: 100;
 }
@@ -647,7 +646,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-gap: 4px; gap: 4px;
+  gap: 4px;
 }
 
 .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -679,7 +678,7 @@ html, body {
 /* ── WRONG ── */
 #wrong-screen {
   display: none;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 0 0 80px;
   animation: fadeUp 0.35s ease;
 }
@@ -697,7 +696,7 @@ html, body {
   padding: 16px 20px;
   display: flex;
   align-items: center;
-  -webkit-gap: 12px; gap: 12px;
+  gap: 12px;
 }
 
 .wrong-count-num {
@@ -747,7 +746,7 @@ html, body {
 .wrong-item-top {
   display: flex;
   align-items: center;
-  -webkit-gap: 8px; gap: 8px;
+  gap: 8px;
   margin-bottom: 8px;
 }
 
@@ -786,7 +785,7 @@ html, body {
 /* ── COLLECT ── */
 #collect-screen {
   display: none;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 0 0 80px;
   animation: fadeUp 0.35s ease;
 }
@@ -804,7 +803,7 @@ html, body {
   padding: 16px 20px;
   display: flex;
   align-items: center;
-  -webkit-gap: 12px; gap: 12px;
+  gap: 12px;
 }
 
 .collect-num {
@@ -822,7 +821,7 @@ html, body {
 /* ── STATS ── */
 #stats-screen {
   display: none;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 0 0 80px;
   animation: fadeUp 0.35s ease;
 }
@@ -895,7 +894,7 @@ html, body {
 .stats-breakdown {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  -webkit-gap: 10px; gap: 10px;
+  gap: 10px;
   padding: 0 16px;
   margin-bottom: 24px;
 }
@@ -965,7 +964,7 @@ html, body {
 /* ── EXAM RESULT ── */
 #exam-result {
   display: none;
-  min-height: 100vh;
+  min-height: 100dvh;
   padding: 40px 20px;
   animation: fadeUp 0.35s ease;
 }
@@ -1004,7 +1003,7 @@ html, body {
 .result-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  -webkit-gap: 12px; gap: 12px;
+  gap: 12px;
   margin-bottom: 28px;
 }
 
@@ -1091,7 +1090,7 @@ html, body {
 .user-info {
   display: flex;
   align-items: center;
-  -webkit-gap: 12px; gap: 12px;
+  gap: 12px;
   margin-bottom: 16px;
 }
 
@@ -1114,7 +1113,7 @@ html, body {
 .user-stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  -webkit-gap: 8px; gap: 8px;
+  gap: 8px;
 }
 
 .user-stat-item {
@@ -1141,7 +1140,7 @@ html, body {
 }
 
 /* Login form */
-.login-form { display: flex; flex-direction: column; -webkit-gap: 10px; gap: 10px; }
+.login-form { display: flex; flex-direction: column; gap: 10px; }
 
 .login-input {
   width: 100%;
@@ -1227,7 +1226,7 @@ html, body {
 .restore-section { }
 .restore-input-row {
   display: flex;
-  -webkit-gap: 8px; gap: 8px;
+  gap: 8px;
   margin-bottom: 10px;
 }
 
@@ -1283,7 +1282,7 @@ html, body {
 
 .restore-success.show { display: block; }
 
-.modal-actions { padding: 8px 20px 20px; display: flex; flex-direction: column; -webkit-gap: 8px; gap: 8px; }
+.modal-actions { padding: 8px 20px 20px; display: flex; flex-direction: column; gap: 8px; }
 
 .modal-btn {
   width: 100%;
@@ -1352,7 +1351,7 @@ html, body {
   z-index: 300;
   align-items: center;
   justify-content: space-between;
-  -webkit-gap: 8px; gap: 8px;
+  gap: 8px;
 }
 
 #install-banner.show { display: flex; }
