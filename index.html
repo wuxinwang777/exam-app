@@ -2052,6 +2052,12 @@ function getFiltered() {
 }
 
 // ── START MODES ─────────────────────────────────────────────────────────────
+function showQuizScreen() {
+  document.getElementById('home').classList.remove('active');
+  document.getElementById('quiz-screen').classList.add('active');
+  document.getElementById('bottom-nav').style.display = 'none';
+}
+
 function startMode(m) {
   mode = m;
   if (m === 'exam') {
@@ -2094,12 +2100,6 @@ function startExam() {
   document.getElementById('quiz-mode-name').textContent = '⏱ 模拟考试 (100题)';
   showQuizScreen();
   renderQuestion();
-}
-
-function showQuizScreen() {
-  document.getElementById('home').classList.remove('active');
-  document.getElementById('quiz-screen').classList.add('active');
-  document.getElementById('bottom-nav').style.display = 'none';
 }
 
 // ── RENDER QUESTION ─────────────────────────────────────────────────────────
