@@ -2405,7 +2405,18 @@ function dismissBanner() {
 document.addEventListener('DOMContentLoaded', init);
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
+  navigator.serviceWorker.register('sw.js?v=4').then(reg => {
+    // 检查是否有新版本
+    reg.addEventListener('updatefound', () => {
+      const newSW = reg.installing;
+      newSW.addEventListener('statechange', () => {
+        if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+          showToast('有新版本可用，3秒后刷新...');
+          setTimeout(() => newSW.postMessage('skip-waiting'), 3000);
+        }
+      });
+    });
+  }).catch(() => {});
 }
 </script>
 </body>
