@@ -1349,6 +1349,10 @@ html, body {
   <div class="reset-section" id="reset-section">
     <button class="reset-btn" onclick="resetAll()">重置所有数据</button>
   </div>
+  <div style="text-align:center;padding:16px;font-size:12px;color:var(--text-dim);margin-top:8px;">
+    <span>v2.0 · </span>
+    <a href="#" onclick="clearAppCache();return false;" style="color:var(--text-dim);text-decoration:underline;">清除缓存</a>
+  </div>
 </div>
 
 <!-- Exam Result -->
@@ -2350,6 +2354,23 @@ function showToast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function clearAppCache() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(reg => {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = event => {
+        if (event.data === 'cache-cleared') {
+          showToast('缓存已清除，3秒后刷新...');
+          setTimeout(() => location.reload(true), 3000);
+        }
+      };
+      reg.active.postMessage('clear-cache', [channel.port2]);
+    });
+  } else {
+    location.reload(true);
+  }
 }
 
 // ── PWA ──────────────────────────────────────────────────────────────────────
