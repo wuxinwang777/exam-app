@@ -43,6 +43,7 @@ html, body {
   font-family: var(--font);
   background: var(--bg);
   color: var(--text);
+  min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -123,6 +124,7 @@ html, body {
 
 /* ── HOME ── */
 #home {
+  min-height: 100vh;
   min-height: 100dvh;
   padding: 0 20px 80px;
   animation: fadeUp 0.5s ease;
@@ -361,6 +363,7 @@ html, body {
 /* ── QUIZ SCREEN ── */
 #quiz-screen {
   display: none;
+  min-height: 100vh;
   min-height: 100dvh;
   padding: 0 0 110px;
   animation: fadeUp 0.35s ease;
@@ -470,12 +473,13 @@ html, body {
   color: var(--text);
 }
 
-.options-list { display: flex; flex-direction: column; gap: 8px; }
+.options-list { display: flex; flex-direction: column; }
+.options-list > * { margin-bottom: 8px; }
+@supports (gap: 8px) { .options-list { gap: 8px; } .options-list > * { margin-bottom: 0; } }
 
 .option-item {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -525,6 +529,7 @@ html, body {
   font-family: var(--mono);
   color: var(--text-muted);
   flex-shrink: 0;
+  margin-right: 10px;
   transition: all 0.2s;
 }
 
