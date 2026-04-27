@@ -1,4 +1,4 @@
-const CACHE_NAME = 'c3-quiz-v2';  // 更新版本号强制刷新缓存
+const CACHE_NAME = 'c3-quiz-v3';  // 更新版本号强制刷新缓存
 const ASSETS = [
   './',
   './index.html',
@@ -26,10 +26,30 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch: network-first for API, cache-first for assets
+// Fetch: network-first for qbank.json, cache-first for other assets
 self.addEventListener('fetch', event => {
   // Skip non-GET
   if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+  const isQbank = url.pathname.endsWith('qbank.json');
+
+  // For qbank.json, always use network-first to get latest data
+  if (isQbank) {
+    event.respondWith(
+      fetch(event.request).then(response => {
+        if (response && response.status === 200) {
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, response.clone());
+          });
+        }
+        return response;
+      }).catch(() => {
+        return caches.match(event.request);
+      })
+    );
+    return;
+  }
 
   event.respondWith(
     caches.open(CACHE_NAME).then(async cache => {
