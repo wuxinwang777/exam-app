@@ -1,4 +1,4 @@
-const CACHE_NAME = 'c3-quiz-v1';
+const CACHE_NAME = 'c3-quiz-v2';  // 更新版本号强制刷新缓存
 const ASSETS = [
   './',
   './index.html',
@@ -50,4 +50,15 @@ self.addEventListener('fetch', event => {
       return cached || networkFetch;
     })
   );
+});
+
+// 强制清理旧缓存（v1 有 bug，需要彻底清除）
+self.addEventListener('message', event => {
+  if (event.data === 'clear-cache') {
+    caches.keys().then(keys => {
+      return Promise.all(keys.map(key => caches.delete(key)));
+    }).then(() => {
+      event.ports[0].postMessage('cache-cleared');
+    });
+  }
 });
